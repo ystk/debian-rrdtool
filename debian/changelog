@@ -1,3 +1,83 @@
+rrdtool (1.4.7-2) unstable; urgency=low
+
+  * Ack NMUs; thanks to Jonathan Wiltshire and gregor herrmann!
+  * Added debian/patches/bts664724-rrdcached-j-segfault:
+    Fixed segfault in rrdcached when starting without having the journal
+    directory available: canonicalize the journal path after creating the
+    directory; else, realpath(3) will return NULL causing strdup() to
+    segfault. Also, check the return value of realpath(3) before further using
+    it. Thanks to Helmut Grohne for reporting this (Closes: #664724).
+
+ -- Sebastian Harl <tokkee@debian.org>  Wed, 01 Aug 2012 10:23:39 +0200
+
+rrdtool (1.4.7-1.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix "fails to install, postinst, invoke-rc.d rrdcached start, start-
+    stop-daemon, segfault":
+    (re-)create /var/lib/rrdcached/{journal,db} in init script.
+    (Closes: #664724)
+  * debian/rules: remove the generated bindings/perl-shared/MYMETA.yml in the
+    clean target.
+
+ -- gregor herrmann <gregoa@debian.org>  Sun, 29 Jul 2012 17:35:13 +0200
+
+rrdtool (1.4.7-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Add ruby_bindings_format_string.patch to fix FTBFS
+    (Closes: #676081)
+
+ -- Jonathan Wiltshire <jmw@debian.org>  Sun, 01 Jul 2012 12:37:47 +0100
+
+rrdtool (1.4.7-1) unstable; urgency=low
+
+  * [b59bb994] Merge commit 'upstream/1.4.7'
+  * [8acead25] Refreshing patches, dropping bts625631-gcc4.5.
+  * [75b42449] Ack NMU.
+    Thanks to Luk Claes (Closes: #619688)
+  * [e11e1d9e] Migrate to dh_python2.
+
+ -- Bernd Zeimetz <bzed@debian.org>  Tue, 24 Jan 2012 23:35:35 +0100
+
+rrdtool (1.4.3-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Don't ship .la files (Closes: #619688).
+
+ -- Luk Claes <luk@debian.org>  Sun, 26 Jun 2011 18:40:41 +0200
+
+rrdtool (1.4.3-3) unstable; urgency=high
+
+  * Reupload to unstable, which has Tcl 8.5 by now.
+  * debian/patches:
+    - Added bts625631-gcc4.5, fixing an compiler issue when using GCC 4.5;
+      thanks to Maxime Petazzoni for reporting this and Sven Hartge for
+      pointing out the upstream fix by anicka@suse.cz (Closes: #625631).
+  * Set urgency to high because of the fix for #625631.
+  * debian/source/format: Explicitly state version 1.0 for now.
+  * debian/control:
+    - Removed prehistoric 'Conflicts' introduced for an incompatibility with
+      Woody.
+    - Updated standards-version to 3.9.2.
+  * debian/rrdtool.doc-base:
+    - Fixed a spelling error detected by lintian.
+
+ -- Sebastian Harl <tokkee@debian.org>  Mon, 16 May 2011 10:28:46 +0200
+
+rrdtool (1.4.3-2) experimental; urgency=low
+
+  * debian/control: Rebuild against Tcl 8.5 (Closes: #582211).
+    - Build-depend on tcl-dev (>= 8.5) and tcl (>= 8.5).
+  * Uploading to experimental, which hosts Tcl 8.5 for now.
+  * debian/patches:
+    - Added tcl-8.5, fixing an issue identified by Tcl 8.5 in the Tcl
+      bindings: So far, a strict version of the "Tcl" package was requested,
+      which seems to have been ignored by Tcl < 8.5. This requirement has been
+      removed.
+
+ -- Sebastian Harl <tokkee@debian.org>  Sun, 06 Jun 2010 15:22:39 +0200
+
 rrdtool (1.4.3-1) unstable; urgency=low
 
   * New upstream release.

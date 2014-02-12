@@ -123,7 +123,7 @@ endif
 
 	# clean what the Makefiles do not clean ...
 	rm -rf bindings/perl-piped/blib bindings/perl-shared/blib \
-	       bindings/perl-piped/Makefile.old bindings/perl-shared/Makefile.old
+	       bindings/perl-piped/Makefile.old bindings/perl-shared/Makefile.old bindings/perl-shared/MYMETA.yml
 	rm -f bindings/tcl/pkgIndex.tcl bindings/tcl/tclrrd*.so
 	rm -f examples/cgi-demo.cgi
 	rm -rf src/.libs src/.deps doc/*.html doc/*.1 doc/*.txt
@@ -153,7 +153,7 @@ install-common-stamp: build-arch-stamp
 	make install DESTDIR=$(CURDIR)/debian/tmp
 	# we don't want .txt and .pod documentation in the package
 	rm -rf debian/tmp/usr/share/doc/rrdtool/txt
-	dh_install --sourcedir=$(CURDIR)/debian/tmp --fail-missing
+	dh_install --sourcedir=$(CURDIR)/debian/tmp -X.la --fail-missing
 	# remove duplicates
 	rm debian/rrdtool/usr/bin/rrdcached
 	rm debian/rrdtool/usr/share/man/man1/rrdcached.1
@@ -214,8 +214,8 @@ binary-arch: build-arch install-arch
 	dh_installdocs -a -A CONTRIBUTORS NEWS
 	dh_installdocs -a
 	echo 'tcl:Depends=tcl$(TCL_VERS) | tclsh' >> debian/rrdtool-tcl.substvars
-	dh_pysupport -ppython-rrdtool
-	dh_pysupport -prrdtool-dbg
+	dh_python2 -ppython-rrdtool
+	dh_python2 -prrdtool-dbg
 	dh_perl -a
 	dh_installman -a
 	dh_installinit -prrdcached

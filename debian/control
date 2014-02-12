@@ -3,22 +3,21 @@ Section: utils
 Priority: optional
 Maintainer: Debian RRDtool Team <rrdtool@ml.snow-crash.org>
 Uploaders: Sebastian Harl <tokkee@debian.org>, Alexander Wirt <formorer@debian.org>, Bernd Zeimetz <bzed@debian.org>
-Standards-Version: 3.8.4
+Standards-Version: 3.9.2
 Build-Depends: debhelper (>= 5.0.38), groff, autotools-dev, gettext, quilt,
  zlib1g-dev, libpng12-dev, libcairo2-dev, libpango1.0-dev, libfreetype6-dev,
  libdbi0-dev,
  libxml2-dev,
- tcl-dev,
+ tcl-dev (>= 8), tcl-dev (<= 9),
  perl (>= 5.8.0),
- python-all-dev (>= 2.3.5-10), python-all-dbg (>= 2.3.5-10),
- python-support (>= 0.7.1),
+ python-all-dev (>= 2.6.6-3~), python-all-dbg (>= 2.6.6-3~),
  ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev,
  liblua5.1-0-dev, lua5.1
 Build-Conflicts: lua50
 Homepage: http://oss.oetiker.ch/rrdtool/
 Vcs-Browser: http://git.snow-crash.org/?p=pkg-rrdtool.git;a=summary
 Vcs-Git: git://git.snow-crash.org/pkg-rrdtool.git/
-XS-Python-Version: >= 2.3
+X-Python-Version: >= 2.3
 
 Package: rrdtool
 Architecture: any
@@ -78,7 +77,6 @@ Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: ttf-dejavu | ttf-bitstream-vera
-Conflicts: rrdtool (<< 1.0.42-1), librrds-perl (<< 1.0.42-1)
 Description: time-series data storage and display system (runtime library)
  The Round Robin Database Tool (RRDtool) is a system to store and display
  time-series data (e.g. network bandwidth, machine-room temperature,
