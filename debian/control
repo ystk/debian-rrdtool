@@ -3,21 +3,22 @@ Section: utils
 Priority: optional
 Maintainer: Debian RRDtool Team <rrdtool@ml.snow-crash.org>
 Uploaders: Sebastian Harl <tokkee@debian.org>, Alexander Wirt <formorer@debian.org>, Bernd Zeimetz <bzed@debian.org>
-Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5.0.38), groff, autotools-dev, gettext, quilt,
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9), groff, autotools-dev, dh-autoreconf, gettext, quilt,
  zlib1g-dev, libpng12-dev, libcairo2-dev, libpango1.0-dev, libfreetype6-dev,
  libdbi0-dev,
  libxml2-dev,
  tcl-dev (>= 8), tcl-dev (<= 9),
  perl (>= 5.8.0),
  python-all-dev (>= 2.6.6-3~), python-all-dbg (>= 2.6.6-3~),
- ruby1.8, ruby1.8-dev, ruby1.9.1, ruby1.9.1-dev,
+ gem2deb,
  liblua5.1-0-dev, lua5.1
 Build-Conflicts: lua50
 Homepage: http://oss.oetiker.ch/rrdtool/
 Vcs-Browser: http://git.snow-crash.org/?p=pkg-rrdtool.git;a=summary
 Vcs-Git: git://git.snow-crash.org/pkg-rrdtool.git/
 X-Python-Version: >= 2.3
+XS-Ruby-Versions: all
 
 Package: rrdtool
 Architecture: any
@@ -56,7 +57,7 @@ Depends: rrdtool (= ${binary:Version}), librrd4 (= ${binary:Version}),
  ${shlibs:Depends}, ${python:Depends}, ${misc:Depends}
 Recommends: librrds-perl (= ${binary:Version}),
  rrdtool-tcl (= ${binary:Version}), python-rrdtool (= ${binary:Version}),
- librrd-ruby1.8 (= ${binary:Version}), librrd-ruby1.9.1 (= ${binary:Version}),
+ ruby-rrd (= ${binary:Version}),
  python-all-dbg, liblua5.1-rrd0 (= ${binary:Version})
 Description: time-series data storage and display system (debugging symbols)
  The Round Robin Database Tool (RRDtool) is a system to store and display
@@ -76,7 +77,7 @@ Package: librrd4
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: ttf-dejavu | ttf-bitstream-vera
+Recommends: fonts-dejavu-core | ttf-dejavu | ttf-bitstream-vera
 Description: time-series data storage and display system (runtime library)
  The Round Robin Database Tool (RRDtool) is a system to store and display
  time-series data (e.g. network bandwidth, machine-room temperature,
@@ -163,10 +164,15 @@ Description: time-series data storage and display system (Python interface)
  .
  This package contains a Python interface to RRDs.
 
-Package: librrd-ruby
-Architecture: all
+Package: ruby-rrd
+Architecture: any
 Section: ruby
-Depends: ${rubydefault:Depends}, ${misc:Depends}
+XB-Ruby-Versions: ${ruby:Versions}
+X-DhRuby-Root: bindings/ruby
+Depends: ${shlibs:Depends}, ${misc:Depends}, ruby | ruby-interpreter
+Replaces: librrd-ruby (<< 1.4.7-2.1~), librrd-ruby1.8 (<< 1.4.7-2.1~), librrd-ruby1.9.1 (<< 1.4.7-2.1~)
+Breaks: librrd-ruby (<< 1.4.7-2.1~), librrd-ruby1.8 (<< 1.4.7-2.1~), librrd-ruby1.9.1 (<< 1.4.7-2.1~)
+Provides: librrd-ruby, librrd-ruby1.8, librrd-ruby1.9.1
 Description: time-series data storage and display system (Ruby interface)
  The Round Robin Database Tool (RRDtool) is a system to store and display
  time-series data (e.g. network bandwidth, machine-room temperature,
@@ -175,36 +181,34 @@ Description: time-series data storage and display system (Ruby interface)
  extracted data to enforce a certain data density, allowing for useful
  graphical representation of data values.
  .
- This is a dummy package which depends on the package for Debian's default
- Ruby version.
+ This package contains a Ruby interface to RRDs.
+
+Package: librrd-ruby
+Architecture: all
+Section: oldlibs
+Priority: extra
+Depends: ${misc:Depends}, ruby-rrd
+Description: Transitional package to ruby-rrd
+ This is a transitional package for librrd-ruby to ease upgrades
+ to the ruby-rrd package. It can safely be removed.
 
 Package: librrd-ruby1.8
-Architecture: any
-Section: ruby
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: time-series data storage and display system (Ruby 1.8 interface)
- The Round Robin Database Tool (RRDtool) is a system to store and display
- time-series data (e.g. network bandwidth, machine-room temperature,
- server load average). It stores the data in Round Robin Databases (RRDs),
- a very compact way that will not expand over time. RRDtool processes the
- extracted data to enforce a certain data density, allowing for useful
- graphical representation of data values.
- .
- This package contains a Ruby 1.8 interface to RRDs.
+Architecture: all
+Section: oldlibs
+Priority: extra
+Depends: ${misc:Depends}, ruby-rrd
+Description: Transitional package to ruby-rrd
+ This is a transitional package for librrd-ruby1.8 to ease upgrades
+ to the ruby-rrd package. It can safely be removed.
 
 Package: librrd-ruby1.9.1
-Architecture: any
-Section: ruby
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: time-series data storage and display system (Ruby 1.9.1 interface)
- The Round Robin Database Tool (RRDtool) is a system to store and display
- time-series data (e.g. network bandwidth, machine-room temperature,
- server load average). It stores the data in Round Robin Databases (RRDs),
- a very compact way that will not expand over time. RRDtool processes the
- extracted data to enforce a certain data density, allowing for useful
- graphical representation of data values.
- .
- This package contains a Ruby 1.9.1 interface to RRDs.
+Architecture: all
+Section: oldlibs
+Priority: extra
+Depends: ${misc:Depends}, ruby-rrd
+Description: Transitional package to ruby-rrd
+ This is a transitional package for librrd-ruby1.9.1 to ease upgrades
+ to the ruby-rrd package. It can safely be removed.
 
 Package: liblua5.1-rrd0
 Architecture: any

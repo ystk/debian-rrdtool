@@ -1,3 +1,8 @@
-usr/lib/perl5/auto/RRDs
-usr/lib/perl5/RRDs.pm
-usr/share/man/man3/RRDs.3pm
+#!/usr/bin/perl
+use Config;
+# omit the leading '/'
+my $vendorarch = substr( $Config{vendorarch}, 1 );
+
+print "$vendorarch/auto/RRDs\n";
+print "$vendorarch/RRDs.pm\n";
+print "usr/share/man/man3/RRDs.3pm\n";

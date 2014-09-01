@@ -1,5 +1,68 @@
+rrdtool (1.4.8-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix failure to build with perl 5.20 from experimental
+    Closes: #752813
+    + convert librrds-perl.install to executable script using
+      $Config{vendorarch} instead of hardcoding /usr/lib/perl5
+    + bump debhelper build-dependency and compat level to 9, needed for having
+      an executable .install
+
+ -- Damyan Ivanov <dmn@debian.org>  Mon, 04 Aug 2014 11:16:56 +0000
+
+rrdtool (1.4.8-1) unstable; urgency=medium
+
+  [ Sebastian Harl ]
+  * New upstream release; thanks to Alin Dobre for reporting this and
+    providing various patches (Closes: #726159):
+    - Fixed the xport JSON output format; thanks to Thomas Mainka for
+      reporting this (Closes: #686825).
+    - Fixed a segfault in rrdcached when using -j on non-existent directories;
+      thanks to Witold Baryluk for reporting this (Closes: #663505).
+    - Fixed segfault in rrdgraph caused by int32 overflows; thanks to Matej
+      Kosik for reporting this (Closes: #451852).
+  * Fixed changelog of 1.4.7-2 regarding the versioned build-dep on tcl-dev.
+  * Merged 1.4.7-2.1 NMU; thanks to Christian Hofstaedtler (Closes: 736333).
+  * debian/patches:
+    - Added CVE-2013-2131; upstream patch fixing a format string vulnerability
+      in rrdgraph; thanks to Henri Salo for reporting this (Closes: #708866).
+      Raised urgency to medium for this.
+  * debian/patches, debian/rules, debian/control:
+    - Added build_ldadd; patch Makefile to pass $ALL_LIBS to rrdcached's
+      linker flags to ensure it's going to be linked against libglib.
+    - Build-depend on and use dh-autoreconf to manage the build_ldadd patch.
+  * debian/control:
+    - Optionally recommend fonts-dejavu-core as (the preferred) alternative to
+      ttf-dejavu-core; thanks to Martin-Éric Racine for reporting this
+      (Closes: #743947).
+    - Updated standards-version to 3.9.5 -- no changes.
+  * debian/rules:
+    - Clean up bindings/perl-shared/MYMETA.json.
+    - Added INSTALL_BASE= to the perl options; else, the Perl libs end up in
+      $HOME.
+
+  [ Alin Dobre ]
+  * debian/patches:
+    - Removed bts664724-rrdcached-j-segfault, ruby_bindings_format_string,
+      and tcl-8.5 which were applied upstream.
+
+ -- Sebastian Harl <tokkee@debian.org>  Sat, 26 Apr 2014 21:18:20 +0200
+
+rrdtool (1.4.7-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Switch Ruby bindings packaging to match the Debian Ruby packaging
+    policy. Based on a patch by Jonas Genannt.
+    Introduce ruby-rrd package, turn librrd-ruby* into transitional
+    packages to ruby-rrd; use gem2deb to build the bindings, and build
+    them for currently supported versions of Ruby, without hardcoding
+    a list of versions. (Closes: #687809, #722377)
+
+ -- Christian Hofstaedtler <zeha@debian.org>  Wed, 22 Jan 2014 11:27:16 +0100
+
 rrdtool (1.4.7-2) unstable; urgency=low
 
+  [ Sebastian Harl ]
   * Ack NMUs; thanks to Jonathan Wiltshire and gregor herrmann!
   * Added debian/patches/bts664724-rrdcached-j-segfault:
     Fixed segfault in rrdcached when starting without having the journal
@@ -7,6 +70,12 @@ rrdtool (1.4.7-2) unstable; urgency=low
     directory; else, realpath(3) will return NULL causing strdup() to
     segfault. Also, check the return value of realpath(3) before further using
     it. Thanks to Helmut Grohne for reporting this (Closes: #664724).
+
+  [ Bernd Zeimetz ]
+  * Removed a restriction on the tcl-dev build-dep which was an accidental
+    left over from a test-build against a new tcl version. Build-depend on
+    tcl-dev >= 8 && <= 9 rather than >= 8.5. The tcl bindings support any 8.x
+    version. This makes backporting easier.
 
  -- Sebastian Harl <tokkee@debian.org>  Wed, 01 Aug 2012 10:23:39 +0200
 

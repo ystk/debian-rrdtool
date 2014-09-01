@@ -19,10 +19,6 @@ endif
 
 
 
-#Ruby versions to build for
-RUBY_VERS := 1.8 1.9.1
-RUBY_DEFAULT_VERS := 1.8
-
 PY_VERS := $(shell pyversions -vr)
 
 #tcl version we're building for
@@ -47,7 +43,7 @@ CONFFLAGS += --disable-python --disable-ruby
 CONFFLAGS += --prefix=/usr --docdir=/usr/share/doc/rrdtool
 
 #install perl libs in vendor mode
-CONFFLAGS += --with-perl-options=INSTALLDIRS=vendor 
+CONFFLAGS += --with-perl-options="INSTALLDIRS=vendor INSTALL_BASE="
 
 #path to tcl
 CONFFLAGS += --with-tcllib=/usr/lib/tcl$(TCL_VERS)
@@ -75,6 +71,8 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
+
+	dh_autoreconf
 
 	LDFLAGS="$(LINKER_FLAGS)" \
 	CFLAGS="$(CFLAGS)" \
@@ -123,13 +121,16 @@ endif
 
 	# clean what the Makefiles do not clean ...
 	rm -rf bindings/perl-piped/blib bindings/perl-shared/blib \
-	       bindings/perl-piped/Makefile.old bindings/perl-shared/Makefile.old bindings/perl-shared/MYMETA.yml
+	       bindings/perl-piped/Makefile.old bindings/perl-shared/Makefile.old
+	rm -f bindings/perl-shared/MYMETA.yml bindings/perl-shared/MYMETA.json
 	rm -f bindings/tcl/pkgIndex.tcl bindings/tcl/tclrrd*.so
 	rm -f examples/cgi-demo.cgi
 	rm -rf src/.libs src/.deps doc/*.html doc/*.1 doc/*.txt
 	rm -f intltool-extract intltool-merge intltool-update
 	rm -f src/librrd.sym
 	rm -f config.h
+
+	dh_autoreconf_clean
 
 	dh_clean
 
@@ -153,6 +154,7 @@ install-common-stamp: build-arch-stamp
 	make install DESTDIR=$(CURDIR)/debian/tmp
 	# we don't want .txt and .pod documentation in the package
 	rm -rf debian/tmp/usr/share/doc/rrdtool/txt
+	chmod a+x debian/librrds-perl.install
 	dh_install --sourcedir=$(CURDIR)/debian/tmp -X.la --fail-missing
 	# remove duplicates
 	rm debian/rrdtool/usr/bin/rrdcached
@@ -163,15 +165,7 @@ install-common-stamp: build-arch-stamp
 
 install-arch: install-common-stamp $(PY_VERS:%=install-python%)
 	#build and install ruby
-	set -e; \
-	cd bindings/ruby ;\
-	for rbv in $(RUBY_VERS); do \
-	  ruby$$rbv extconf.rb ;\
-	  make ;\
-	  make install sitelibdir=$(CURDIR)/debian/librrd-ruby$$rbv`ruby$$rbv -r rbconfig -e 'print Config::CONFIG["rubylibdir"]'` \
-	               sitearchdir=$(CURDIR)/debian/librrd-ruby$$rbv`ruby$$rbv -r rbconfig -e 'print Config::CONFIG["archdir"]'` ;\
-	  make distclean ;\
-	done
+	dh_ruby --install
 
 	dh_installexamples -s
 	chmod 644 debian/rrdcached/usr/share/doc/rrdcached/examples/RRDCached.pm
@@ -193,11 +187,9 @@ install-python%: install-common-stamp
 binary-indep: build-indep install-indep
 	dh_testdir
 	dh_testroot
-	dh_link -plibrrd-ruby /usr/share/doc/librrd-ruby$(RUBY_DEFAULT_VERS) /usr/share/doc/librrd-ruby
-	dh_installchangelogs -i -Nlibrrd-ruby CHANGES
-	dh_installdocs -i -Nlibrrd-ruby -A CONTRIBUTORS NEWS
-	dh_link -i -Nlibrrd-ruby
-	echo 'rubydefault:Depends=librrd-ruby$(RUBY_DEFAULT_VERS)' >> debian/librrd-ruby.substvars
+	dh_installchangelogs -i CHANGES
+	dh_installdocs -i -A CONTRIBUTORS NEWS
+	dh_link -i
 	dh_perl -i
 	dh_compress -i
 	dh_fixperms -i
