@@ -187,6 +187,7 @@ Package: librrd-ruby
 Architecture: all
 Section: oldlibs
 Priority: extra
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ruby-rrd
 Description: Transitional package to ruby-rrd
  This is a transitional package for librrd-ruby to ease upgrades
