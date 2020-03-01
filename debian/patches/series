@@ -6,3 +6,4 @@ no-rpath-for-perl
 implicit-decl-fix
 bts530814-hurd
 CVE-2013-2131
+CVE-2014-6262.patch

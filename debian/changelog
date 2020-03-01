@@ -1,3 +1,11 @@
+rrdtool (1.4.8-1.2+deb8u1) jessie-security; urgency=high
+
+  * Non-maintainer upload by the LTS team.
+  * Add patch to properly fix the bad_format checking misery.
+    (Fixes: CVE-2014-6262)
+
+ -- Utkarsh Gupta <utkarsh@debian.org>  Sun, 01 Mar 2020 19:17:46 +0530
+
 rrdtool (1.4.8-1.2) unstable; urgency=medium
 
   * Non-maintainer upload.
