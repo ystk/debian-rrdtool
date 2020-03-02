@@ -1,0 +1,23 @@
+Description: This patch fixes the regression caused by +deb8u1 upload.
+Author: Utkarsh Gupta <utkarsh@debian.org>
+Last-Update: 2020-03-02
+
+--- a/src/rrd_graph.c
++++ b/src/rrd_graph.c
+@@ -329,14 +329,14 @@
+ int bad_format_imginfo(char *fmt){
+     return bad_format_check("^" SAFE_STRING "%s" SAFE_STRING "%lu" SAFE_STRING "%lu" SAFE_STRING "$",fmt);
+ }
+-#define FLOAT_STRING "%[+- 0#]?[0-9]*([.][0-9]+)?l[eEfF]"
++#define FLOAT_STRING "%[-+ 0#]?[0-9]*(?:[.][0-9]+)?l[eEfFgG]"
+ 
+ int bad_format_axis(char *fmt){
+     return bad_format_check("^" SAFE_STRING FLOAT_STRING SAFE_STRING "$",fmt);
+ }
+ 
+ int bad_format_print(char *fmt){
+-    return bad_format_check("^" SAFE_STRING FLOAT_STRING SAFE_STRING "%s" SAFE_STRING "$",fmt);
++    return bad_format_check("^" SAFE_STRING FLOAT_STRING SAFE_STRING "(?:%s)?" SAFE_STRING "$",fmt);
+ }
+ 
+ int im_free(

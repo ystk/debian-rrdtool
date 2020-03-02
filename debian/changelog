@@ -1,3 +1,10 @@
+rrdtool (1.4.8-1.2+deb8u2) jessie-security; urgency=high
+
+  * Non-maintainer upload by the LTS team.
+  * Add patch to fix regression against CVE-2014-6262 (Closes: #952958).
+
+ -- Utkarsh Gupta <utkarsh@debian.org>  Mon, 02 Mar 2020 21:29:01 +0530
+
 rrdtool (1.4.8-1.2+deb8u1) jessie-security; urgency=high
 
   * Non-maintainer upload by the LTS team.
